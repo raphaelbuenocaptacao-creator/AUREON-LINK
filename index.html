@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0B1020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AUREON LINK">
+  <meta name="description" content="AUREON LINK — hub leve para acessar os produtos do ecossistema AUREON.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <title>AUREON LINK</title>
+  <style>
+    :root{color-scheme:dark;--bg:#070B16;--panel:#10172B;--text:#F8FAFC;--muted:#94A3B8;--accent:#7C3AED;--cyan:#22D3EE}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 20% 0,rgba(124,58,237,.28),transparent 34%),radial-gradient(circle at 100% 10%,rgba(34,211,238,.14),transparent 30%),var(--bg);color:var(--text)}main{width:min(960px,100%);margin:auto;padding:32px 18px 96px}.badge{display:inline-flex;padding:8px 12px;border:1px solid rgba(255,255,255,.12);border-radius:999px;color:#c4b5fd;background:rgba(124,58,237,.12)}h1{font-size:clamp(42px,9vw,82px);line-height:.92;margin:22px 0 18px;letter-spacing:-.05em}p{color:var(--muted);font-size:18px;max-width:680px}.panel{margin-top:34px;padding:22px;border:1px solid rgba(255,255,255,.1);background:rgba(16,23,43,.82);backdrop-filter:blur(18px);border-radius:24px}.status{display:flex;gap:10px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;background:#34d399;box-shadow:0 0 18px #34d399}.install{margin-top:18px;border:0;border-radius:14px;padding:13px 16px;background:linear-gradient(135deg,var(--accent),#4f46e5);color:white;font-weight:700;display:none}@media(max-width:600px){main{padding-top:22px}.panel{border-radius:20px}}
+  </style>
+</head>
+<body>
+<main>
+  <span class="badge">AUREON ECOSYSTEM</span>
+  <h1>AUREON<br>LINK</h1>
+  <p>Seu ponto de entrada para os produtos AUREON. Esta primeira versão estabelece uma base PWA instalável, responsiva e preparada para evoluir sem armazenar dados privados em cache.</p>
+  <section class="panel" aria-label="Status do aplicativo">
+    <div class="status"><span class="dot"></span><strong>Base PWA ativa</strong></div>
+    <p>O conteúdo público essencial pode abrir offline. Login, APIs, tokens e respostas privadas nunca entram no cache.</p>
+    <button class="install" id="installBtn">Instalar AUREON LINK</button>
+  </section>
+</main>
+<script>
+let deferredPrompt;const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.style.display='inline-flex'});
+installBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.style.display='none'});
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1-private-safe',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
+}
+</script>
+</body>
+</html>
