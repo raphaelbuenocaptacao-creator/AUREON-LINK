@@ -1,6 +1,6 @@
 const CACHE_PREFIX='aureon-link-';
-const CACHE_NAME=`${CACHE_PREFIX}v1-private-safe-shell`;
-const SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg'];
+const CACHE_NAME=`${CACHE_PREFIX}v2-private-safe-raster-shell`;
+const SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png'];
 const PRIVATE_PATHS=/\/(api|auth|login|logout|session|token|account|profile|admin)(\/|$)/i;
 const SENSITIVE_QUERY=/(token|auth|session|password|senha|secret|key|code)/i;
 function requestIsPublic(req){
@@ -22,7 +22,10 @@ function responseIsCacheable(res){
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE_NAME);
   for(const path of SHELL){
-    try{const res=await fetch(new Request(path,{credentials:'omit',cache:'reload',redirect:'error'}));if(responseIsCacheable(res))await cache.put(path,res.clone());}catch{}
+    try{
+      const res=await fetch(new Request(new URL(path,self.registration.scope),{credentials:'omit',cache:'reload',redirect:'error'}));
+      if(responseIsCacheable(res))await cache.put(path,res.clone());
+    }catch{}
   }
   await self.skipWaiting();
 })()));
@@ -33,7 +36,7 @@ self.addEventListener('activate',event=>event.waitUntil((async()=>{
 })()));
 self.addEventListener('fetch',event=>{
   const req=event.request;if(!requestIsPublic(req))return;
-  const url=new URL(req.url);const isNavigation=req.mode==='navigate';
+  const isNavigation=req.mode==='navigate';
   event.respondWith((async()=>{
     try{
       const fresh=await fetch(req);
