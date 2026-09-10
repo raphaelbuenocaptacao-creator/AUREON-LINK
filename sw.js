@@ -1,5 +1,5 @@
 const CACHE_PREFIX='aureon-link-';
-const CACHE_NAME=`${CACHE_PREFIX}v3-private-vary-range-safe-shell`;
+const CACHE_NAME=`${CACHE_PREFIX}v4-private-vary-range-safe-shell`;
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png'];
 const PRIVATE_PATHS=/\/(api|auth|login|logout|session|token|account|profile|admin)(\/|$)/i;
 const SENSITIVE_QUERY=/(token|auth|session|password|senha|secret|key|code)/i;
@@ -16,7 +16,7 @@ function responseIsCacheable(res){
   if(cc.includes('private')||cc.includes('no-store'))return false;
   if(res.headers.has('set-cookie')||res.headers.has('content-range'))return false;
   const vary=(res.headers.get('vary')||'').toLowerCase().split(',').map(v=>v.trim()).filter(Boolean);
-  if(vary.some(v=>v==='*'||v==='cookie'||v==='authorization'||v==='range'))return false;
+  if(vary.some(v=>v==='*'||v==='cookie'||v==='authorization'||v==='range'||v==='if-range'))return false;
   return true;
 }
 self.addEventListener('install',event=>event.waitUntil((async()=>{
