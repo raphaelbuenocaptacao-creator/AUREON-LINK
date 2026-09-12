@@ -223,7 +223,7 @@
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.style.display='inline-flex'});
     installBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.style.display='none'});
     if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
-      window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=3-aureon-bio',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
+      window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=4-private-vary-range-safe-shell',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
     }
   </script>
 </body>
